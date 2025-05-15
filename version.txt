@@ -1,1 +1,1 @@
-quak 1.0.0 TEST1 Github File Test
+quak 1.0.0 TEST1
