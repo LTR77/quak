@@ -9,7 +9,7 @@ const int screenHeight = 1300;
 
 bool IsJumping = false;
 float JumpVelocity = 0.0f;
-float gravity = -0.005f;
+double gravity = -0.005d;
 float JumpStrength = 0.3f;
 int PauseCounter = 0;
 
@@ -122,6 +122,9 @@ int main() {
 
     Model gun = LoadModel("resources/low-poly_sig_p365_xl.glb");
 
+    InitAudioDevice();
+    Sound GunShot = LoadSound("resources/fixed_gunshot.wav");
+
     // Camera
     Camera camera = {0};
     camera.position = (Vector3){0.0f, 2.0f, 2.0f};
@@ -190,6 +193,7 @@ int main() {
             // Shoot
             Ray LookRay = GetScreenToWorldRay((Vector2){screenWidth/2, screenHeight/2}, camera);
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                PlaySound(GunShot);
                 RayCollision GunCollision = GetRayCollisionBox(LookRay, game.map.CubeBoundingBox);
                 if(GunCollision.hit) {
                     std::cout << "pressded left mosue btn!\n";
@@ -242,6 +246,7 @@ int main() {
         EndDrawing();
     }
     UnloadModel(gun);
+    CloseAudioDevice();
     CloseWindow();
     return 0;
 }
