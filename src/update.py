@@ -53,21 +53,25 @@ else:
         zip.close()
         print("Finished Extracting!")
         print("Updating Files.. (3/4)")
-        with open("version.txt", "w") as src_version, open("temp/quak-main/version.txt", "r") as dest_version:
+        with open("version.txt", "w") as src_version, open("temp/quak-main/src/version.txt", "r") as dest_version:
             src_version.write(dest_version.read())
             print("Wrote to version.txt")
-        with open("main.cpp", "w") as src_game, open("temp/quak-main/quak/src/main.cpp", "r") as dest_game:
+        with open("main.cpp", "w") as src_game, open("temp/quak-main/src/main.cpp", "r") as dest_game:
             src_game.write(dest_game.read())
             print("Wrote to main.cpp")
         path = os.path.join("..", "resources")
-        if os.path.exists(path):
-            shutil.rmtree(path)
+        try:
+            if os.path.exists(path):
+                shutil.rmtree(path)
             print("Deleted resources directory for Replacement!")
-            shutil.copytree("temp/quak-main/quak/resources", ".")
-            print("Wrote to resources/*")
-        else:
-            shutil.copytree("temp/quak-main/quak/resources", ".")
-            print("Wrote to resources/*")
+            shutil.copytree("temp/quak-main/resources", path)
+            print("Wrote to ../resources/*")
+        except FileExistsError:
+            print("Failed to Replace ../resources: File Already Exists")
+        except PermissionError:
+            print("Failed to Replace ../resources: Permission Error")
+        except FileNotFoundError:
+            print("Failed to Replace ../resources: File Not Found")
         print("Cleaning up.. (4/4)")
         os.remove("upd.zip")
         shutil.rmtree("temp")
